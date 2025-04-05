@@ -1,0 +1,29 @@
+
+### Booth Setup
+
+1. Set up a laptop with a webcam and an external display
+2. Position the webcam at eye level for the best experience
+3. Connect to a stable internet connection
+4. Open the application in a Chrome browser
+5. Set the browser to fullscreen mode (F11)
+6. Print the QR code (in the assets/qr folder) for users to access the site on their phones
+
+## Customization
+
+- Update the event date in `js/utils.js`
+- Replace background images in `assets/backgrounds/`
+- Update logos and branding in `assets/logos/`
+- Modify stickers in `assets/stickers/`
+- Adjust colors in `css/style.css` (look for `:root` variables)
+
+## Troubleshooting
+
+- **Camera not working**: Ensure browser permissions are granted for camera access
+- **Slow performance**: Lower the resolution in `js/camera.js` or try a different effect
+- **QR code issues**: Make sure the server is accessible on your local network
+
+## Credits
+
+- TensorFlow.js and BodyPix for AI background removal
+- MediaPipe for pose detection
+- QRCode.js for QR code generation

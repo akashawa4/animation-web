@@ -1,0 +1,541 @@
+:root {
+    --primary-color: #1e3a8a;
+    --secondary-color: #f97316;
+    --accent-color: #10b981;
+    --background-color: #0f172a;
+    --text-color: #f8fafc;
+    --card-bg: rgba(30, 41, 59, 0.8);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header Styles */
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.logo-container {
+    margin-bottom: 15px;
+}
+
+.logo {
+    height: 80px;
+}
+
+.event-title {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
+    animation: glow 2s infinite alternate;
+}
+
+.countdown-timer {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    margin-bottom: 20px;
+}
+
+/* Welcome Section */
+.welcome-section {
+    text-align: center;
+    margin-bottom: 30px;
+    background-color: var(--card-bg);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.name-input-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#userName {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--secondary-color);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #e86207;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+}
+
+#welcomeMessage {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: var(--accent-color);
+}
+
+.fun-message {
+    font-size: 1.2rem;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+/* Camera Container */
+.camera-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.video-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    height: 0;
+    padding-bottom: 56.25%; /* Default 16:9 Aspect Ratio, will be dynamically updated */
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    background-color: #000; /* Add background color to prevent transparent areas */
+    transition: padding-bottom 0.3s ease; /* Smooth transition when aspect ratio changes */
+}
+
+#webcam, #outputCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the video fills the container */
+    border-radius: 10px;
+}
+
+.branding-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    pointer-events: none;
+    z-index: 100;
+    transition: all 0.3s ease;
+}
+
+.college-logo img, .event-logo img {
+    height: 60px;
+    max-height: 10vh;
+    width: auto;
+    object-fit: contain;
+    transition: height 0.3s ease;
+}
+
+.event-branding {
+    text-align: center;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.event-name {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: font-size 0.3s ease;
+}
+
+.college-name {
+    font-size: 16px;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: font-size 0.3s ease;
+}
+
+.event-tagline {
+    font-size: 14px;
+    font-style: italic;
+    color: #f97316;
+    transition: font-size 0.3s ease;
+}
+
+.event-overlay {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10;
+    width: calc(100% - 40px);
+    pointer-events: none; /* Allow clicks to pass through */
+    transition: all 0.3s ease; /* Smooth transition for position changes */
+}
+
+.event-name {
+    font-size: 2rem; /* Will be dynamically updated */
+    font-weight: 700;
+    color: var(--secondary-color);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: font-size 0.3s ease;
+}
+
+.college-name {
+    font-size: 1.2rem; /* Will be dynamically updated */
+    color: var(--text-color);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: font-size 0.3s ease;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 800px;
+}
+
+.effect-selector {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+/* Enhanced effect buttons */
+.effect-btn {
+    padding: 8px 15px;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.effect-btn:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    transition: all 0.5s ease;
+}
+
+.effect-btn:hover:before {
+    left: 100%;
+}
+
+.effect-btn.active {
+    background-color: var(--secondary-color);
+    color: white;
+    box-shadow: 0 0 10px var(--secondary-color);
+}
+
+/* Avatar effect specific styles */
+.effect-btn[data-effect="avatar"] {
+    background-color: #6200ea;
+    color: white;
+}
+
+.effect-btn[data-effect="avatar"].active {
+    background-color: #3700b3;
+    box-shadow: 0 0 15px #3700b3;
+}
+
+.effect-btn[data-effect="glitch"] {
+    background-color: #d81b60;
+    color: white;
+}
+
+.effect-btn[data-effect="glitch"].active {
+    background-color: #a00037;
+    box-shadow: 0 0 15px #a00037;
+}
+
+.effect-btn[data-effect="rainbow"] {
+    background: linear-gradient(90deg, #ff0000, #ff9900, #33cc33, #3399ff, #cc33ff);
+    color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.effect-btn[data-effect="rainbow"].active {
+    box-shadow: 0 0 15px rgba(255,255,255,0.7);
+}
+
+.capture-btn {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    background-color: var(--accent-color);
+    color: white;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.capture-btn:hover {
+    background-color: #0ca678;
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+}
+
+/* Result container styles */
+.result-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.captured-image-container {
+    max-width: 80%;
+    max-height: 60vh;
+    margin-bottom: 20px;
+}
+
+#capturedImage {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Add these styles to your existing CSS file */
+
+.qr-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 250px;
+}
+
+#qrcode {
+    padding: 10px;
+    background-color: white;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.qr-instructions {
+    text-align: center;
+    margin-top: 10px;
+    color: #333;
+}
+
+.qr-instructions p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.qr-expiry {
+    font-size: 12px !important;
+    color: #666;
+    font-style: italic;
+}
+
+.qr-loading {
+    padding: 20px;
+    text-align: center;
+    color: #666;
+    font-style: italic;
+}
+
+.qr-error {
+    padding: 20px;
+    text-align: center;
+    color: #d32f2f;
+    font-style: italic;
+}
+
+.direct-download-btn {
+    display: inline-block;
+    background-color: #2196F3;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin: 15px 0;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.direct-download-btn:hover {
+    background-color: #0b7dda;
+}
+
+@media (max-width: 768px) {
+    .qr-container {
+        max-width: 200px;
+    }
+    
+    #qrcode img {
+        width: 180px !important;
+        height: 180px !important;
+    }
+}
+
+#closeResultBtn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#closeResultBtn:hover {
+    background-color: #d32f2f;
+}
+
+#qrcode {
+    margin-bottom: 10px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px 0;
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes glow {
+    from {
+        text-shadow: 0 0 5px rgba(249, 115, 22, 0.5);
+    }
+    to {
+        text-shadow: 0 0 20px rgba(249, 115, 22, 0.8);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .event-title {
+        font-size: 2.2rem;
+    }
+    
+    .video-container {
+        padding-bottom: 75%; /* 4:3 Aspect Ratio for mobile */
+    }
+    
+    .event-name {
+        font-size: 1.5rem;
+    }
+    
+    .college-name {
+        font-size: 1rem;
+    }
+    
+    #welcomeMessage {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .event-title {
+        font-size: 1.8rem;
+    }
+    
+    .logo {
+        height: 60px;
+    }
+    
+    .name-input-container {
+        flex-direction: column;
+    }
+    
+    #userName {
+        width: 100%;
+    }
+    
+    .effect-selector {
+        gap: 5px;
+    }
+    
+    .effect-btn {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+    }
+}

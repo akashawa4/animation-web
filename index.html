@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Updated Content Security Policy to allow necessary connections -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; connect-src 'self' https:; media-src 'self' blob:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'">
+    <title>INVENTO 2K25 - DYPSN College</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#f97316">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+    <!-- Add this in the head section -->
+    <style>
+        /* Watermark styles */
+        .watermark-toggle input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        /* Improve the look of the captured image container */
+        .captured-image-container {
+            position: relative;
+            max-width: 100%;
+            border: 3px solid #f97316;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        #capturedImage {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+        
+        /* Make sure branding overlay text is visible */
+        .branding-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        .college-logo img, .event-logo img {
+            height: 60px;
+            object-fit: contain;
+        }
+        
+        .event-branding {
+            text-align: center;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .event-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .college-name {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .event-tagline {
+            font-size: 14px;
+            font-style: italic;
+            color: #f97316;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            
+            <h1 class="event-title">INVENTO 2K25</h1>
+            <div class="countdown-timer" id="countdown"></div>
+        </header>
+
+        <main>
+            <div class="welcome-section">
+                <div class="name-input-container">
+                    <input type="text" id="userName" placeholder="Enter your name">
+                    <button id="submitName">Submit</button>
+                    <p>or</p>
+                    <button id="scanQrBtn">Scan QR Code</button>
+                </div>
+                <h2 id="welcomeMessage">Welcome to INVENTO 2K25!</h2>
+                <p id="funMessage" class="fun-message"></p>
+            </div>
+
+            <div class="camera-container">
+                <div class="video-container">
+                    <video id="webcam" autoplay playsinline></video>
+                    <canvas id="outputCanvas"></canvas>
+                    <div class="event-overlay">
+                        <div class="event-name">INVENTO 2K25</div>
+                        <div class="college-name">DYPSN College</div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <div class="effect-selector">
+                        <button class="effect-btn" data-effect="normal">Normal</button>
+                        <button class="effect-btn" data-effect="cartoon">Cartoon</button>
+                        <button class="effect-btn" data-effect="neon">Neon</button>
+                        <button class="effect-btn" data-effect="anime">Anime</button>
+                        <button class="effect-btn" data-effect="pixelate">Pixelate</button>
+                        <button class="effect-btn" data-effect="avatar">Avatar</button>
+                        <button class="effect-btn" data-effect="glitch">Glitch</button>
+                        <button class="effect-btn" data-effect="rainbow">Rainbow</button>
+                    </div>
+                    <button id="captureBtn" class="capture-btn">Capture Snapshot</button>
+                </div>
+            </div>
+
+            <div class="result-container" id="resultContainer">
+                <div class="captured-image-container">
+                    <img id="capturedImage" alt="Captured Image">
+                </div>
+                <div class="qr-container">
+                    <div id="qrcode"></div>
+                    <p>Scan this QR code to download your image</p>
+                </div>
+                <button id="closeResultBtn">Take Another Photo</button>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 DYPSN College - INVENTO 2K25</p>
+        </footer>
+    </div>
+
+    <!-- Add these before your other script tags -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import { getStorage } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+      import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    
+      // Your web app's Firebase configuration
+        const firebaseConfig = {
+         apiKey: "AIzaSyAv5wxTWeks_iL4BVwDEqEJqNoByxMOcj4",
+        authDomain: "animation-web-7b476.firebaseapp.com",
+         projectId: "animation-web-7b476",
+        storageBucket: "animation-web-7b476.appspot.com", // Fixed: was "animation-web-7b476.firebasestorage.app"
+        messagingSenderId: "517706026983",
+        appId: "1:517706026983:web:de4a69cb39552ea0fdb742"
+};
+    
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const storage = getStorage(app);
+      const db = getFirestore(app);
+    
+      // Make Firebase services available globally
+      window.firebaseStorage = storage;
+      window.firebaseDB = db;
+    </script>
+    
+    <!-- Your existing scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+    <script src="js/animegan.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/qrcode.js"></script>
+    <script src="js/effects.js"></script>
+    <script src="js/camera.js"></script>
+    <script src="js/stickers.js"></script>
+    <script src="js/social.js"></script>
+    <script src="js/download.js"></script>
+    <script src="js/cartoon-effect.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/watermark.js"></script>
+    <script>
+        // Register service worker for offline capabilities
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
+        }
+    </script>
+
+    <!-- Add this to the controls section -->
+    <div class="watermark-toggle" style="margin-top: 15px; display: flex; align-items: center; justify-content: center;">
+        <label for="previewWatermark" style="display: flex; align-items: center; cursor: pointer;">
+            <input type="checkbox" id="previewWatermark" checked>
+            <span style="margin-left: 8px; color: white;">Preview Watermark</span>
+        </label>
+    </div>
+
+    <!-- Add this script at the end of the body -->
+    <script>
+        // Make addWatermarkToImage function available globally
+        window.addWatermarkToImage = function(ctx, width, height) {
+            // This will be defined in main.js
+            if (typeof addWatermarkToImage === 'function') {
+                addWatermarkToImage(ctx, width, height);
+            }
+        };
+        
+        // Setup watermark toggle
+        document.addEventListener('DOMContentLoaded', () => {
+            const checkbox = document.getElementById('previewWatermark');
+            if (checkbox) {
+                checkbox.addEventListener('change', () => {
+                    console.log('Watermark preview toggled:', checkbox.checked);
+                    localStorage.setItem('previewWatermark', checkbox.checked);
+                });
+                
+                // Load saved preference
+                const savedPreference = localStorage.getItem('previewWatermark');
+                if (savedPreference !== null) {
+                    checkbox.checked = savedPreference === 'true';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+/
+├── index.html
+├── css/
+│   └── style.css
+├── js/
+│   ├── main.js
+│   ├── camera.js
+│   ├── effects.js
+│   ├── qrcode.js
+│   └── utils.js
+└── assets/
+    ├── backgrounds/
+    │   └── event-bg.jpg
+    ├── logos/
+    │   └── invento-logo.png
+    └── fonts/
